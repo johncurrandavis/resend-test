@@ -1,0 +1,25 @@
+
+npm init -y
+npm install express resend dotenv cors
+
+express	creates our web server and API routes
+resend sends emails through Resend
+dotenv reads secrets from .env
+cors allows your frontend to make requests to the backend
+
+configure Node.js for import syntax:
+open package.json
+change "type" to "module"
+add to scripts: "start": "node server.js"
+
+inside backend, create the .env file
+RESEND_API_KEY=your_api_key (don't include quotes)
+PORT=3000
+
+never commit .env to Git
+create .gitignore
+node_modules/
+.env
+
+create backend/server.js
+

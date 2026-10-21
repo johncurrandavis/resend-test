@@ -1,0 +1,10 @@
+
+
+create vite@latest
+
+name: frontend
+Vanilla, JavaScript, Yes
+
+
+
+

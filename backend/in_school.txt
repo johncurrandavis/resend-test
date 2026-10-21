@@ -1,0 +1,6 @@
+
+enter this in the terminal:
+
+$env:NODE_USE_SYSTEM_CA = "1"
+
+then: npm start
