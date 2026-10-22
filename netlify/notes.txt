@@ -1,0 +1,8 @@
+
+run locally:
+
+Netlify's command-line tool, Netlify CLI, can run your function locally
+
+open a terminal in the root of resend-test — the folder containing backend, frontend and netlify.
+
+run: npx netlify-cli --version
