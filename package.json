@@ -19,7 +19,6 @@
   },
   "homepage": "https://github.com/johncurrandavis/resend-test#readme",
   "dependencies": {
-    "dotenv": "^18.0.9",
     "resend": "^6.37.0"
   }
 }

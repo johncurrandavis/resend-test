@@ -1,0 +1,13 @@
+
+[build]
+  # build the Vite frontend
+  command = "npm ci --prefix frontend && npm run build --prefix frontend"
+
+  # publish the finished Vite website
+  publish = "frontend/dist"
+
+  # keep the base directory at the repository root
+
+[functions]
+  # location of our Netlify Functions
+  directory = "netlify/functions"
