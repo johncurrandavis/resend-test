@@ -1,3 +1,6 @@
+import "dotenv/config";
+import { Resend } from "resend";
+
 
 export default async (request) => {
 
@@ -57,15 +60,59 @@ export default async (request) => {
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailPattern.test(cleanEmail)) { return jsonResponse({ error: "Please enter a valid email address." }, 400); }
 
-  // temporary success response: no email is sent yet
-  return jsonResponse({ message: "Input validated successfully!" });
+  // check that the Resend API key is configured
+  if (!process.env.RESEND_API_KEY) {
+    console.error("RESEND_API_KEY is not configured.");
+
+    return jsonResponse(
+      { error: "Email service is not configured." },
+      500
+    );
+  }
+
+  // create a Resend client
+  const resend = new Resend(process.env.RESEND_API_KEY);
+
+  // send the email
+  try {
+    const { data, error } = await resend.emails.send({
+
+      from: "onboarding@resend.dev",
+      to: "peopleswebsites@gmail.com",
+      replyTo: cleanEmail,
+      subject: "Website contact form message",
+      text: `You have received a new contact form message.
+
+      Name: ${cleanName}
+      Email: ${cleanEmail}
+
+      Message:
+      ${cleanMessage}`
+
+    });
+
+    // handle an error returned by Resend
+    if (error) {
+      console.error("Resend error:", error);
+      return jsonResponse({ error: "The email provider could not send the email." }, 502);
+    }
+
+    // report successful delivery request
+    return jsonResponse({
+      message: "Email sent successfully!",
+      id: data.id
+    });
+
+  } catch (error) {
+    console.error("Email sending failed:", error);
+    return jsonResponse({ error: "An unexpected error occurred while sending the email." }, 500);
+  }
 
 };
 
 
 // helper to return consistent JSON responses
 function jsonResponse(data, status = 200, extraHeaders = {}) {
-
   return new Response(JSON.stringify(data), {
     status,
     headers: {
@@ -73,5 +120,4 @@ function jsonResponse(data, status = 200, extraHeaders = {}) {
       ...extraHeaders
     }
   });
-
 }

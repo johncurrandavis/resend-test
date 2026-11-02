@@ -68,17 +68,24 @@ contactForm.addEventListener('submit', async (event) => {
 
   try {
 
-    // send a POST request to Express
-    const response = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/send-email`,  // the frontend API address from .env
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(contact)  // convert the values to JSON for the backend
-      }
-    );
+    // choose which backend to use
+    const backend = import.meta.env.VITE_BACKEND;
 
-const result = await response.json();
+    // select the appropriate API endpoint
+    const apiUrl = backend === 'render'
+
+      // ternary operator: if backend is render, use
+      // the Render URL, otherwise, use the Netlify Function URL
+      ? `${import.meta.env.VITE_API_URL}/api/send-email` : '/.netlify/functions/hello';
+
+    // send a POST request to the selected backend
+    const response = await fetch(apiUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(contact)
+    });
+
+    const result = await response.json();
 
     if (!response.ok) { throw new Error(result.error || 'Failed to send message.'); }
 
@@ -92,4 +99,6 @@ const result = await response.json();
   } finally {
     submitButton.disabled = false;
   }
+
 });
+
