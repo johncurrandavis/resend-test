@@ -85,8 +85,8 @@ contactForm.addEventListener('submit', async (event) => {
       body: JSON.stringify(contact)
     });
 
-    const result = await response.json();
-
+    let result;
+    try { result = await response.json(); } catch { throw new Error('The server returned an unexpected response.'); }
     if (!response.ok) { throw new Error(result.error || 'Failed to send message.'); }
 
     status.textContent = 'Thank you! Your message has been sent.';

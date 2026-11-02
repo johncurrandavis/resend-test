@@ -1,4 +1,10 @@
-import "dotenv/config";
+
+// the Netlify CLI automatically loads the local .env variables
+// when running functions:serve, we don't need dotenv explicitly in the function
+// (you could also remove the now-unnecessary dependency
+// from the project root: npm uninstall dotenv)
+// import "dotenv/config";
+
 import { Resend } from "resend";
 
 
